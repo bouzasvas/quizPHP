@@ -1,0 +1,155 @@
+body {
+    background-color: cadetblue;
+    text-align: center;
+}
+
+#mainContent {
+    text-align: center;
+}
+
+#mainContent.welcome {
+    background-color: cadetblue;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+#siteTitle {
+    font-family: "Comic Sans MS";
+    font-style: italic;
+    text-align: center;
+    text-decoration: underline;
+}
+
+#startQuizLabel {
+    font-size: 20pt;
+}
+
+#startQuiz {
+    background-color: cornflowerblue;
+    cursor: pointer;
+    font-size: 25pt;
+    border-style: solid;
+    border-color: black;
+    border-radius: 12px;
+    transition-duration: 0.5s;
+}
+
+#startQuiz:hover {
+    background-color: darkcyan;
+}
+
+#startQuiz:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.QInfoHidden {
+    visibility: collapse;
+}
+
+.QInfo {
+    font-size: 20px;
+    font-weight: bold;
+    visibility: visible;
+}
+
+#currentQuestion {
+    font-size: 30px;
+}
+
+#answers {
+    margin-bottom: 20px;
+}
+
+.ans{
+    font-size: 25px;
+    padding: 10px;
+    display: block;
+    clear: both;
+}
+
+#Qtime {
+    position: absolute;
+    right: 16%;
+}
+
+#questionSection {
+    visibility: hidden;
+}
+
+#questionSection.active {
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    height: auto;
+    border-style: solid;
+    border-radius: 12px;
+    visibility: visible;
+}
+
+.hiddenControls {
+    visibility: hidden;
+}
+
+#done.QControls {
+    cursor: pointer;
+    background-color: darkolivegreen;
+    border-style: solid;
+    border-color: black;
+    border-radius: 5px;
+    margin-top: 10px;
+    position: relative;
+    display: block;
+    left: 55%;
+    font-size: 30px;
+    visibility: visible;
+    width: 400px;
+}
+
+#done.QControls:hover {
+    background-color: darkgreen;
+}
+
+.QControls {
+    cursor: pointer;
+    background-color: cornflowerblue;
+    border-style: solid;
+    border-color: black;
+    border-radius: 5px;
+    margin-top: 10px;
+    position: relative;
+    left: 20%;
+    font-size: 20px;
+    visibility: visible;
+    width: 200px;
+}
+
+#previous.QControls:hover {
+    background-color: brown;
+}
+
+#next.QControls:hover {
+    background-color: dodgerblue;
+}
+
+.QControls:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+#footer {
+    position: absolute;
+    text-align: left;
+    bottom: 0;
+}
+
+#footer.afterStart {
+    position: relative;
+    text-align: left;
+}
