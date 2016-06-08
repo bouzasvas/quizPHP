@@ -17,7 +17,7 @@
         <div id="questionSection">
             <span id="QNumber" class="QInfoHidden">Ερώτηση <span id="questionN"></span> από 6</span>
             <span id="Qtime" class="QInfoHidden">Χρόνος: <span id="currentTime"></span> δευτερόλεπτα</span><hr>
-            <p id="currentQuestion">Πόσα πρωταθλήματα έχει κατακτήσει ο Michael Jordan;</p>
+            <p id="currentQuestion"></p>
             <!-- Form maybe here?? -->
             <div id="answers">
                 <label class="ans"><input type="radio" name="ans"><span id="ans1"></span></label>

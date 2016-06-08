@@ -85,6 +85,12 @@ buttonPrev.addEventListener("click", function () {
 buttonNext.addEventListener("click", function () {
     if (currentQuestion < questions.length-1) {
         currentQuestion++;
+        var inputs = document.getElementsByTagName("input");
+
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].checked = false;
+        }
+
         showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
     }
 
