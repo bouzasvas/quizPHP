@@ -33,12 +33,24 @@ buttonStartQuiz.addEventListener("click", function () {
 function sendRequestToPhpServer() {
     //AJAX??
 
-    questions[0] = "Πόσα πρωταθλήματα έχει κατακτήσει ο Michael Jordan;";
-    questions[1] = "Τι ύψος έχει ο πύργος του Άιφελ;";
-    questions[2] = "Στον 2ο παγκόσμιο πόλεμο πότε επιτέθηκε η Γερμανία στην Γαλλία;";
-    questions[3] = "Ποιο γράμμα συμβολίζει η μια απλή τελεία στο κώδικα του Morse;";
-    questions[4] = "Πόσα X χρωμοσώματα έχει το γυναικείο φύλο;";
-    questions[5] = "Πως γράφετε το 2014 σε Ρωμαϊκούς αριθμούς;";
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            questions = xhttp.responseText.split("%");
+            showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
+        }
+    }
+
+    xhttp.open("GET", "retrieveQuestions.php?q=questions", true);
+    xhttp.send();
+
+    // questions[0] = "Πόσα πρωταθλήματα έχει κατακτήσει ο Michael Jordan;";
+    // questions[1] = "Τι ύψος έχει ο πύργος του Άιφελ;";
+    // questions[2] = "Στον 2ο παγκόσμιο πόλεμο πότε επιτέθηκε η Γερμανία στην Γαλλία;";
+    // questions[3] = "Ποιο γράμμα συμβολίζει η μια απλή τελεία στο κώδικα του Morse;";
+    // questions[4] = "Πόσα X χρωμοσώματα έχει το γυναικείο φύλο;";
+    // questions[5] = "Πως γράφετε το 2014 σε Ρωμαϊκούς αριθμούς;";
 
     answers[0] = ["1", "2", "3", "6"]; //6
     answers[1] = ["1.5m", "1.8m", "2.4m", "3m"]; //3m
@@ -47,7 +59,7 @@ function sendRequestToPhpServer() {
     answers[4] = ["1", "2", "3", "4"]; //2
     answers[5] = ["MMXIV", "MMXV", "MMXVI", "XVI"]; //MMXIV
 
-    showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
+    // showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
 }
 
 function showResultsToBrowser(num, question, answersText) {
