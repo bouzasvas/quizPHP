@@ -10,7 +10,7 @@ var currentQuestion = 0;
 var timer;
 
 var userChoices = new Array(6);
-var q_a;
+var q_a = new Array(6);
 
 var Q_A = function() {
     this.question;
@@ -42,7 +42,6 @@ buttonStartQuiz.addEventListener("click", function () {
     info[0].className = "QInfo";
     info[0].className = "QInfo";
 
-    buttonPrev.className = "QControls";
     buttonNext.className = "QControls";
 
     //document.getElementById("footer").className = "afterStart";
@@ -57,32 +56,42 @@ function sendRequestToPhpServer() {
     xhttp.onreadystatechange = function () {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
 
-            var resp = xhttp.responseText;
-            alert(resp);
-            // questions = xhttp.responseText.split("%");
-            //
-            // var currentAnswers = questions[questions.length-1].split("#");
-            // questions.pop();
-            // for (var ans = 0; ans < 3; ans++) {
-            //     answers[ans] = currentAnswers[ans].split(",");
-            // }
-            //
-            // showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
+            var rows = xhttp.responseText.split("$$");
+            rows.pop();
+
+            for (var row = 0; row < rows.length; row++) {
+                var rowProperties = rows[row].split("#$");
+
+                var ansProperties = rowProperties[1].split("#");
+                var correctAns = ansProperties.pop();
+
+                var question = rowProperties[0];
+                var answers =  ansProperties;
+                setQ_A_Properties(row, {question: question, answers: answers, correctAnswer: correctAns});
+            }
+            showResultsToBrowser(currentQuestion+1, q_a[currentQuestion].question, q_a[currentQuestion].answers);
         }
     }
 
     xhttp.open("GET", "retrieveQuestions.php?q=questionsWithAnswers", true);
     xhttp.send();
+}
 
-    // var q_a1 = new Q_A("Πόσα πρωταθλήματα έχει κατακτήσει ο Michael Jordan;", ["1", "2", "3", "6"], 4);
-    // var q_a2 = new Q_A("Τι ύψος έχει ο πύργος του Άιφελ;", ["1.5m", "1.8m", "2.4m", "3m"], 4);
-    // var q_a3 = new Q_A("Στον 2ο παγκόσμιο πόλεμο πότε επιτέθηκε η Γερμανία στην Γαλλία;", ["1940", "1941", "1942", "1943"], 1);
-    // var q_a4 = new Q_A("Ποιο γράμμα συμβολίζει η μια απλή τελεία στο κώδικα του Morse;", ["A", "C", "E", "D"], 3);
-    // var q_a5 = new Q_A("Πόσα X χρωμοσώματα έχει το γυναικείο φύλο;", ["1", "2", "3", "4"], 2);
-    // var q_a6 = new Q_A("Πως γράφετε το 2014 σε Ρωμαϊκούς αριθμούς;", ["MMXIV", "MMXV", "MMXVI", "XVI"], 1);
-    // q_a = [q_a1, q_a2, q_a3, q_a4, q_a5, q_a6];
-    //
-    // showResultsToBrowser(currentQuestion+1, q_a[currentQuestion].question, q_a[currentQuestion].answers);
+function setQ_A_Properties(q, options) {
+    if (q_a[q] == undefined) {
+        q_a[q] = new Q_A();
+    }
+
+    //check params
+    if (options.question) {
+        q_a[q].setQuestion(options.question);
+    }
+    if (options.answers) {
+        q_a[q].setAnswers(options.answers);
+    }
+    if (options.correctAnswer) {
+        q_a[q].setCorrectAnswer(options.correctAnswer);
+    }
 }
 
 function showResultsToBrowser(num, question, answersText) {
@@ -125,6 +134,15 @@ buttonPrev.addEventListener("click", function () {
         currentQuestion--;
         showResultsToBrowser(currentQuestion+1, q_a[currentQuestion].question, q_a[currentQuestion].answers);
     }
+
+
+    if (currentQuestion == 0) {
+        buttonPrev.className = "hiddenControls";
+    }
+
+    if (currentQuestion<5) {
+        buttonNext.className = "QControls";
+    }
 }, false);
 
 
@@ -135,7 +153,12 @@ buttonNext.addEventListener("click", function () {
         showResultsToBrowser(currentQuestion+1, q_a[currentQuestion].question, q_a[currentQuestion].answers);
     }
 
+    if (currentQuestion == 1) {
+        buttonPrev.className = "QControls";
+    }
+
     if (currentQuestion==5) {
+        buttonNext.className = "hiddenControls";
         document.getElementById("done").className = "QControls";
     }
 }, false);
@@ -168,11 +191,24 @@ buttonDone.addEventListener("click", function () {
     info.innerHTML = "Απάντησες σωστά ";
     info.appendChild(spanNumber);
     var remainingText = document.createElement("span");
-    remainingText.innerHTML = " σε χρόνο " + document.getElementById("currentTime").innerHTML+ " δευτερόλεπτα!";
+
+    var percentage = ((correctAnswersNUM/q_a.length)*100).toFixed(2);
+
+    remainingText.innerHTML = " από τις "+ q_a.length + " (" + percentage + "%) σε χρόνο " + document.getElementById("currentTime").innerHTML+ " δευτερόλεπτα!";
     info.appendChild(remainingText);
     info.style.margin = "0";
 
     divQuestion.innerHTML = "";
     divQuestion.className = "result";
     divQuestion.appendChild(info);
+
+    var img = document.createElement("img");
+    if (percentage >= 50) {
+        img.setAttribute("src", "images/happy.png");
+    }
+    else {
+        img.setAttribute("src", "images/sad.png")
+    }
+
+    divQuestion.appendChild(img);
 }, false);
