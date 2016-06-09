@@ -12,10 +12,19 @@ var timer;
 var userChoices = new Array(6);
 var q_a;
 
-var Q_A = function(question, answers, correctAns) {
-    this.question = question;
-    this.answers = answers;
-    this.correctAnswer = correctAns;
+var Q_A = function() {
+    this.question;
+    this.answers;
+    this.correctAnswer;
+    this.setQuestion = function (question) {
+        this.question = question;
+    }
+    this.setAnswers = function (answers) {
+        this.answers = answers;
+    }
+    this.setCorrectAnswer = function (correctAns) {
+        this.correctAnswer = correctAns;
+    }
     this.getCorrectAnswer = function () {
         return this.correctAnswer;
     }
@@ -43,36 +52,37 @@ buttonStartQuiz.addEventListener("click", function () {
 }, false);
 
 function sendRequestToPhpServer() {
-    //AJAX??
+    var xhttp = new XMLHttpRequest();
 
-    // var xhttp = new XMLHttpRequest();
-    //
-    // xhttp.onreadystatechange = function () {
-    //     if (xhttp.readyState == 4 && xhttp.status == 200) {
-    //         questions = xhttp.responseText.split("%");
-    //
-    //         var currentAnswers = questions[questions.length-1].split("#");
-    //         questions.pop();
-    //         for (var ans = 0; ans < 3; ans++) {
-    //             answers[ans] = currentAnswers[ans].split(",");
-    //         }
-    //
-    //         showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
-    //     }
-    // }
-    //
-    // xhttp.open("GET", "retrieveQuestions.php?q=questionsWithAnswers", true);
-    // xhttp.send();
+    xhttp.onreadystatechange = function () {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
 
-    var q_a1 = new Q_A("Πόσα πρωταθλήματα έχει κατακτήσει ο Michael Jordan;", ["1", "2", "3", "6"], 4);
-    var q_a2 = new Q_A("Τι ύψος έχει ο πύργος του Άιφελ;", ["1.5m", "1.8m", "2.4m", "3m"], 4);
-    var q_a3 = new Q_A("Στον 2ο παγκόσμιο πόλεμο πότε επιτέθηκε η Γερμανία στην Γαλλία;", ["1940", "1941", "1942", "1943"], 1);
-    var q_a4 = new Q_A("Ποιο γράμμα συμβολίζει η μια απλή τελεία στο κώδικα του Morse;", ["A", "C", "E", "D"], 3);
-    var q_a5 = new Q_A("Πόσα X χρωμοσώματα έχει το γυναικείο φύλο;", ["1", "2", "3", "4"], 2);
-    var q_a6 = new Q_A("Πως γράφετε το 2014 σε Ρωμαϊκούς αριθμούς;", ["MMXIV", "MMXV", "MMXVI", "XVI"], 1);
-    q_a = [q_a1, q_a2, q_a3, q_a4, q_a5, q_a6];
+            var resp = xhttp.responseText;
+            alert(resp);
+            // questions = xhttp.responseText.split("%");
+            //
+            // var currentAnswers = questions[questions.length-1].split("#");
+            // questions.pop();
+            // for (var ans = 0; ans < 3; ans++) {
+            //     answers[ans] = currentAnswers[ans].split(",");
+            // }
+            //
+            // showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
+        }
+    }
 
-    showResultsToBrowser(currentQuestion+1, q_a[currentQuestion].question, q_a[currentQuestion].answers);
+    xhttp.open("GET", "retrieveQuestions.php?q=questionsWithAnswers", true);
+    xhttp.send();
+
+    // var q_a1 = new Q_A("Πόσα πρωταθλήματα έχει κατακτήσει ο Michael Jordan;", ["1", "2", "3", "6"], 4);
+    // var q_a2 = new Q_A("Τι ύψος έχει ο πύργος του Άιφελ;", ["1.5m", "1.8m", "2.4m", "3m"], 4);
+    // var q_a3 = new Q_A("Στον 2ο παγκόσμιο πόλεμο πότε επιτέθηκε η Γερμανία στην Γαλλία;", ["1940", "1941", "1942", "1943"], 1);
+    // var q_a4 = new Q_A("Ποιο γράμμα συμβολίζει η μια απλή τελεία στο κώδικα του Morse;", ["A", "C", "E", "D"], 3);
+    // var q_a5 = new Q_A("Πόσα X χρωμοσώματα έχει το γυναικείο φύλο;", ["1", "2", "3", "4"], 2);
+    // var q_a6 = new Q_A("Πως γράφετε το 2014 σε Ρωμαϊκούς αριθμούς;", ["MMXIV", "MMXV", "MMXVI", "XVI"], 1);
+    // q_a = [q_a1, q_a2, q_a3, q_a4, q_a5, q_a6];
+    //
+    // showResultsToBrowser(currentQuestion+1, q_a[currentQuestion].question, q_a[currentQuestion].answers);
 }
 
 function showResultsToBrowser(num, question, answersText) {

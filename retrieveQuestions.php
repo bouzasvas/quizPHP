@@ -1,17 +1,29 @@
 <?php
-    $choice = $_GET['q'];
 
-    if ($choice=='questionsWithAnswers') {
-        echo 'Πόσα πρωταθλήματα έχει κατακτήσει ο Michael Jordan;%';
-        echo 'Τι ύψος έχει ο πύργος του Άιφελ;%';
-        echo 'Στον 2ο παγκόσμιο πόλεμο πότε επιτέθηκε η Γερμανία στην Γαλλία;%';
-        echo 'Ποιο γράμμα συμβολίζει η μια απλή τελεία στο κώδικα του Morse;%';
-        echo 'Πόσα X χρωμοσώματα έχει το γυναικείο φύλο;%';
-        echo 'Πως γράφετε το 2014 σε Ρωμαϊκούς αριθμούς;%';
+require_once('db.php');
 
-        echo '1, 2, 3, 6#';
-        echo '1.5m, 1.8m, 2.4m, 3m#';
-        echo '1940, 1941, 1942, 1943#';
-        
+$db = new DB_Management("localhost", "root", "root");
+
+$alreadyConnected = false;
+
+if (!$alreadyConnected) {
+    $alreadyConnected = $db->connectToDB();
+}
+
+$q  = $_GET['q'];
+
+if ($q == "questionsWithAnswers") {
+    $query = 'select question, ans1, ans2, ans3, ans4, ans
+              from answers, correctanswers, questions
+              where questions.questionID = answers.questionID
+              and questions.questionID = correctanswers.questionID';
+
+    $queryResults = $db->queryToDB($query);
+
+        while($row = $queryResults->fetch()) {
+            echo $row["question"];
+        }
+    } else {
+        echo "0 results";
     }
 ?>
