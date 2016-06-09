@@ -87,10 +87,26 @@ body {
     margin-left: auto;
     margin-right: auto;
     width: 70%;
-    height: auto;
+    height: 350px;
     border-style: solid;
     border-radius: 12px;
     visibility: visible;
+}
+
+#questionSection.result {
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    height: 350px;
+    border-style: solid;
+    border-radius: 12px;
+    visibility: visible;
+    font-size: 25pt;
+    font-family: "Comic Sans MS";
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .hiddenControls {

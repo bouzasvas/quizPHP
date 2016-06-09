@@ -4,10 +4,22 @@ var divQuestion = document.getElementById("questionSection");
 
 var buttonPrev = document.getElementById("previous");
 var buttonNext = document.getElementById("next");
+var buttonDone = document.getElementById("done");
 
 var currentQuestion = 0;
-var questions = new Array; //is an array that contains all the question from PHP Server;
-var answers = {"1": [], "2": [], "3": [], "4": [], "5": [], "6": []};
+var timer;
+
+var userChoices = new Array(6);
+var q_a;
+
+var Q_A = function(question, answers, correctAns) {
+    this.question = question;
+    this.answers = answers;
+    this.correctAnswer = correctAns;
+    this.getCorrectAnswer = function () {
+        return this.correctAnswer;
+    }
+};
 
 
 buttonStartQuiz.addEventListener("click", function () {
@@ -33,33 +45,34 @@ buttonStartQuiz.addEventListener("click", function () {
 function sendRequestToPhpServer() {
     //AJAX??
 
-    var xhttp = new XMLHttpRequest();
+    // var xhttp = new XMLHttpRequest();
+    //
+    // xhttp.onreadystatechange = function () {
+    //     if (xhttp.readyState == 4 && xhttp.status == 200) {
+    //         questions = xhttp.responseText.split("%");
+    //
+    //         var currentAnswers = questions[questions.length-1].split("#");
+    //         questions.pop();
+    //         for (var ans = 0; ans < 3; ans++) {
+    //             answers[ans] = currentAnswers[ans].split(",");
+    //         }
+    //
+    //         showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
+    //     }
+    // }
+    //
+    // xhttp.open("GET", "retrieveQuestions.php?q=questionsWithAnswers", true);
+    // xhttp.send();
 
-    xhttp.onreadystatechange = function () {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-            questions = xhttp.responseText.split("%");
-            showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
-        }
-    }
+    var q_a1 = new Q_A("Πόσα πρωταθλήματα έχει κατακτήσει ο Michael Jordan;", ["1", "2", "3", "6"], 4);
+    var q_a2 = new Q_A("Τι ύψος έχει ο πύργος του Άιφελ;", ["1.5m", "1.8m", "2.4m", "3m"], 4);
+    var q_a3 = new Q_A("Στον 2ο παγκόσμιο πόλεμο πότε επιτέθηκε η Γερμανία στην Γαλλία;", ["1940", "1941", "1942", "1943"], 1);
+    var q_a4 = new Q_A("Ποιο γράμμα συμβολίζει η μια απλή τελεία στο κώδικα του Morse;", ["A", "C", "E", "D"], 3);
+    var q_a5 = new Q_A("Πόσα X χρωμοσώματα έχει το γυναικείο φύλο;", ["1", "2", "3", "4"], 2);
+    var q_a6 = new Q_A("Πως γράφετε το 2014 σε Ρωμαϊκούς αριθμούς;", ["MMXIV", "MMXV", "MMXVI", "XVI"], 1);
+    q_a = [q_a1, q_a2, q_a3, q_a4, q_a5, q_a6];
 
-    xhttp.open("GET", "retrieveQuestions.php?q=questions", true);
-    xhttp.send();
-
-    // questions[0] = "Πόσα πρωταθλήματα έχει κατακτήσει ο Michael Jordan;";
-    // questions[1] = "Τι ύψος έχει ο πύργος του Άιφελ;";
-    // questions[2] = "Στον 2ο παγκόσμιο πόλεμο πότε επιτέθηκε η Γερμανία στην Γαλλία;";
-    // questions[3] = "Ποιο γράμμα συμβολίζει η μια απλή τελεία στο κώδικα του Morse;";
-    // questions[4] = "Πόσα X χρωμοσώματα έχει το γυναικείο φύλο;";
-    // questions[5] = "Πως γράφετε το 2014 σε Ρωμαϊκούς αριθμούς;";
-
-    answers[0] = ["1", "2", "3", "6"]; //6
-    answers[1] = ["1.5m", "1.8m", "2.4m", "3m"]; //3m
-    answers[2] = ["1940", "1941", "1942", "1943"]; //1940
-    answers[3] = ["A", "C", "E", "D"]; //E
-    answers[4] = ["1", "2", "3", "4"]; //2
-    answers[5] = ["MMXIV", "MMXV", "MMXVI", "XVI"]; //MMXIV
-
-    // showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
+    showResultsToBrowser(currentQuestion+1, q_a[currentQuestion].question, q_a[currentQuestion].answers);
 }
 
 function showResultsToBrowser(num, question, answersText) {
@@ -80,7 +93,7 @@ function showResultsToBrowser(num, question, answersText) {
 
 function initTimer() {
     var sec = 0;
-    setInterval(function () {
+    timer = setInterval(function () {
         sec++;
         document.getElementById("currentTime").innerHTML = sec;
     }, 1000)
@@ -89,24 +102,63 @@ function initTimer() {
 buttonPrev.addEventListener("click", function () {
     if (currentQuestion!=0) {
         currentQuestion--;
-        showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
+        showResultsToBrowser(currentQuestion+1, q_a[currentQuestion].question, q_a[currentQuestion].answers);
     }
 }, false);
 
 
 buttonNext.addEventListener("click", function () {
-    if (currentQuestion < questions.length-1) {
-        currentQuestion++;
-        var inputs = document.getElementsByTagName("input");
+    if (currentQuestion < q_a.length-1) {
+        var inputs = document.querySelectorAll("input[type=\"radio\"]");
 
         for (var i = 0; i < inputs.length; i++) {
-            inputs[i].checked = false;
+            if (inputs[i].checked) {
+               userChoices[currentQuestion] = inputs[i].value;
+                inputs[i].checked = false;
+            }
         }
 
-        showResultsToBrowser(currentQuestion+1, questions[currentQuestion], answers[currentQuestion]);
+        currentQuestion++;
+        showResultsToBrowser(currentQuestion+1, q_a[currentQuestion].question, q_a[currentQuestion].answers);
     }
 
     if (currentQuestion==5) {
         document.getElementById("done").className = "QControls";
     }
+}, false);
+
+buttonDone.addEventListener("click", function () {
+    clearInterval(timer);
+
+    var correctAnswersNUM = 0;
+    buttonPrev.style.visibility = "collapse";
+    buttonNext.style.visibility = "collapse";
+    buttonDone.innerHTML = "Παίξε ξανά!";
+
+    buttonDone.addEventListener("click", function () {
+        location.host = location.host;
+    })
+
+    for (var ans = 0; ans < userChoices.length; ans++) {
+        if (userChoices[ans] == q_a[ans].getCorrectAnswer()) {
+            correctAnswersNUM++;
+        }
+    }
+
+    var info = document.createElement("p");
+
+    var spanNumber = document.createElement("span");
+    spanNumber.innerHTML = correctAnswersNUM;
+    spanNumber.style.color = "red";
+
+    info.innerHTML = "Απάντησες σωστά ";
+    info.appendChild(spanNumber);
+    var remainingText = document.createElement("span");
+    remainingText.innerHTML = " σε χρόνο " + document.getElementById("currentTime").innerHTML+ " δευτερόλεπτα!";
+    info.appendChild(remainingText);
+    info.style.margin = "0";
+
+    divQuestion.innerHTML = "";
+    divQuestion.className = "result";
+    divQuestion.appendChild(info);
 }, false);
