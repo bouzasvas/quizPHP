@@ -33,5 +33,9 @@ class DB_Management {
 
         return $queryResult;
     }
+
+    function closeConnection() {
+        $this->db = null;
+    }
 }
 ?>

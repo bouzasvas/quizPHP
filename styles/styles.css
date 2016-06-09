@@ -67,6 +67,8 @@ body {
 }
 
 .ans{
+    border-style: solid;
+    margin-bottom: 5px;
     font-size: 25px;
     padding: 10px;
     display: block;
@@ -74,14 +76,13 @@ body {
     cursor: pointer;
 }
 
-#answers input[type="radio"]:hover ~ * {
-    border-radius: 5px;
+.ans:hover {
     background-color: darkturquoise;
 }
 
-#answers input[type="radio"]:checked ~ * {
+input[type="radio"]:checked ~ * {
     border-radius: 5px;
-    background:darkturquoise;
+    background-color: darkturquoise;
 }
 
 input[type="radio"] {
