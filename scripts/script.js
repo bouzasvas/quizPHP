@@ -99,6 +99,17 @@ function initTimer() {
     }, 1000)
 }
 
+function checkUserAnswer(current) {
+    var inputs = document.querySelectorAll("input[type=\"radio\"]");
+
+    for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].checked) {
+            userChoices[current] = inputs[i].value;
+            inputs[i].checked = false;
+        }
+    }
+}
+
 buttonPrev.addEventListener("click", function () {
     if (currentQuestion!=0) {
         currentQuestion--;
@@ -109,15 +120,7 @@ buttonPrev.addEventListener("click", function () {
 
 buttonNext.addEventListener("click", function () {
     if (currentQuestion < q_a.length-1) {
-        var inputs = document.querySelectorAll("input[type=\"radio\"]");
-
-        for (var i = 0; i < inputs.length; i++) {
-            if (inputs[i].checked) {
-               userChoices[currentQuestion] = inputs[i].value;
-                inputs[i].checked = false;
-            }
-        }
-
+        checkUserAnswer(currentQuestion);
         currentQuestion++;
         showResultsToBrowser(currentQuestion+1, q_a[currentQuestion].question, q_a[currentQuestion].answers);
     }
@@ -129,6 +132,7 @@ buttonNext.addEventListener("click", function () {
 
 buttonDone.addEventListener("click", function () {
     clearInterval(timer);
+    checkUserAnswer(currentQuestion);
 
     var correctAnswersNUM = 0;
     buttonPrev.style.visibility = "collapse";
