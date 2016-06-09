@@ -50,7 +50,7 @@ insert into questions(question) values
 
 insert into answers(ans1, ans2, ans3, ans4, questionID) values
 ("1", "3", "5", "6" , 1),
-("150", "195", "220", "300", 2),
+("150μ.", "195μ.", "220μ.", "300μ.", 2),
 ("Άδειος", "Λιτός", "Νέος", "Γεμάτος", 3),
 ("Samsung", "Alcatel", "Nokia", "Apple", 4),
 ("1", "2", "3", "4", 5),
