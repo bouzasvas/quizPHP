@@ -68,7 +68,8 @@ body {
 
 .ans{
     border-style: solid;
-    margin-bottom: 5px;
+    border-radius: 12px;
+    border-color: transparent;
     font-size: 25px;
     padding: 10px;
     display: block;
@@ -80,7 +81,7 @@ body {
     background-color: darkturquoise;
 }
 
-input[type="radio"]:checked ~ * {
+input[type="radio"]:checked + label {
     border-radius: 5px;
     background-color: darkturquoise;
 }
@@ -103,7 +104,7 @@ input[type="radio"] {
     margin-left: auto;
     margin-right: auto;
     width: 70%;
-    height: 385px;
+    height: auto;
     border-style: solid;
     border-radius: 12px;
     visibility: visible;
